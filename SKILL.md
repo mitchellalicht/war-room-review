@@ -13,9 +13,9 @@ A review where every seat agrees is a review that failed. Either the artifact is
 
 Pick one before starting. If the user doesn't say, infer it and state it in the Context line.
 
-- **Full review** — default. All five seats, all sections.
-- **Scoped review** — the user names seats ("just eng and content"). Run only those, and still write the tensions section.
-- **Re-review** — the user returns with a revised artifact after a prior review. See "Re-review" below.
+- **Full review**—default. All five seats, all sections.
+- **Scoped review**—the user names seats ("just eng and content"). Run only those, and still write the tensions section.
+- **Re-review**—the user returns with a revised artifact after a prior review. See "Re-review" below.
 
 ## Before reviewing
 
@@ -52,15 +52,15 @@ Each seat gives 2–4 notes. Not everything is worth saying. A seat with nothing
 
 Every note carries one. Calibrate honestly:
 
-- **Blocking** — ships broken, or ships wrong. A user can't complete the task, loses money or data, hits an accessibility barrier, or the feature solves a different problem than the one agreed. Rare. If a review has more than one or two, re-read them and demote what isn't truly blocking.
-- **Should fix** — real cost if ignored. Users will struggle or the team will pay for it later, but the feature still works.
-- **Consider** — judgment call, reasonable people differ.
+- **Blocking**—ships broken, or ships wrong. A user can't complete the task, loses money or data, hits an accessibility barrier, or the feature solves a different problem than the one agreed. Rare. If a review has more than one or two, re-read them and demote what isn't truly blocking.
+- **Should fix**—real cost if ignored. Users will struggle or the team will pay for it later, but the feature still works.
+- **Consider**—judgment call, reasonable people differ.
 
 ### Note format
 
 Each note is one line of finding, then the evidence, then the fix:
 
-> **Should fix — Error copy names the problem, not the remedy.** "Payment failed" gives no next step. Try: "Payment didn't go through. Check your card details or try another card."
+> **Should fix—Error copy names the problem, not the remedy.** "Payment failed" gives no next step. Try: "Payment didn't go through. Check your card details or try another card."
 
 Point at the exact element, string, state, or step. "The onboarding could be clearer" is not a note.
 
