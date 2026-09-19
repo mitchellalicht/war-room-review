@@ -16,6 +16,7 @@ Pick one before starting. If the user doesn't say, infer it and state it in the 
 - **Full review**—default. All five seats, all sections.
 - **Scoped review**—the user names seats ("just eng and content"). Run only those, and still write the tensions section.
 - **Re-review**—the user returns with a revised artifact after a prior review. See "Re-review" below.
+- **Compact review**—the user wants something short or shareable ("quick pass", "one-pager", "something I can send"). See "Compact review" below. Combines with any other mode.
 
 ## Before reviewing
 
@@ -48,13 +49,30 @@ Read each rubric from `references/` and produce that seat's notes. Read all five
 
 Each seat gives 2–4 notes. Not everything is worth saying. A seat with nothing substantive says "no blocking concerns" and stops rather than manufacturing a nitpick.
 
-### Severity
+### Shared findings
 
-Every note carries one. Calibrate honestly:
+When two or more seats independently flag the same underlying problem, don't list it twice. Write it once, under the seat that owns the fix, and tag it with who else saw it:
+
+> **Blocking—The countdown timer has no defined behavior at zero.** *Also raised by: the user (screen reader announces every second).* ...
+
+Independent agreement is the strongest signal in the review, so make it visible. The exception is when the seats see different problems in the same element. Then keep both notes, because the fixes differ.
+
+### Severity
 
 - **Blocking**—ships broken, or ships wrong. A user can't complete the task, loses money or data, hits an accessibility barrier, or the feature solves a different problem than the one agreed. Rare. If a review has more than one or two, re-read them and demote what isn't truly blocking.
 - **Should fix**—real cost if ignored. Users will struggle or the team will pay for it later, but the feature still works.
 - **Consider**—judgment call, reasonable people differ.
+
+### Severity check
+
+Run this before writing the output. It is a required step, not a reminder.
+
+1. Count the Blocking notes. If there are more than two, re-read each against the definition above.
+2. For each, ask: could a customer still complete the task, and could the team still ship safely? If yes to both, demote it to Should fix.
+3. If two Blocking notes share a root cause, merge them into one (see Shared findings).
+4. If you demoted anything, that's fine. If you kept more than two, say why in one line under Context.
+
+A first draft that marks everything Blocking is normal. Shipping it that way is the failure.
 
 ### Note format
 
@@ -132,9 +150,17 @@ When the user returns with a revised artifact:
 
 The most useful thing a re-review catches is **Moved**. A fix that trades one problem for another looks like progress and isn't.
 
-## Shareable version
+## Compact review
 
-If the user wants to send the review to a team, offer a one-page version: Context, What's working, the tensions, and "If you fix three things." Drop the per-seat notes unless asked. Write it so someone who never saw the artifact can act on it.
+For a quick pass or something to send to a team. Still run all five seats internally, since the tensions come from their collisions, but only print:
+
+1. **Context**—one line.
+2. **What's working**—one to three items.
+3. **Where they disagree**—each tension in two or three sentences, with its kind (answerable, real tradeoff, false conflict) and the resolution or decision-maker.
+4. **If you fix three things**—ranked.
+5. **Blocking issues**—any that aren't already covered above, one line each.
+
+Target roughly 400 words. Write it so someone who never saw the artifact can act on it. Offer the full per-seat notes afterward.
 
 ## Failure modes to avoid
 

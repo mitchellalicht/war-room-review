@@ -25,6 +25,7 @@ Then share a flow, screen, spec, or piece of copy and ask for a review. Phrases 
 | **Full review** | Default | All five seats, tensions, top three fixes |
 | **Scoped review** | You name seats ("just eng and content") | Only those seats, plus the tensions between them |
 | **Re-review** | You come back with a revised artifact | Each prior tension marked resolved, moved, untouched, or disputed |
+| **Compact review** | You want a quick pass or something to send | About 400 words: what's working, the tensions, top three fixes |
 
 ## The five seats
 
@@ -39,7 +40,8 @@ Then share a flow, screen, spec, or piece of copy and ask for a review. Phrases 
 ## How it keeps the seats honest
 
 - **Independent drafting.** Each seat writes from its own rubric before any seat reads another's notes. Optional subagents for high-stakes reviews.
-- **Calibrated severity.** Blocking, should fix, or consider, with a definition for each and a check against inflation.
+- **Calibrated severity.** Blocking, should fix, or consider, with a definition for each and a required check before output that demotes anything inflated.
+- **Shared findings.** When two seats independently flag the same problem, it's written once and tagged with who else saw it. Independent agreement is the strongest signal in the review.
 - **What's working.** Every review names what to protect, so authors don't fix the parts that were right.
 - **Stated assumptions.** Anything guessed to keep moving goes in an Assumptions section.
 - **Three kinds of tension.** Answerable (check the data), a real tradeoff (name the decision-maker), or a false conflict (one small change satisfies both).
@@ -54,7 +56,12 @@ If you fix three things
 Open questions
 ```
 
-A one-page shareable version is available on request.
+A compact one-page version is available on request.
+
+## See it work
+
+- [Fernwood checkout review](examples/fernwood-checkout-review.md)—a full review of a fictional four-screen checkout, with five seats, four tensions, and the top three fixes.
+- [Visual one-pager](https://mitchellalicht.github.io/war-room-review/)—the same review as a designed page.
 
 ## What good disagreement looks like
 
@@ -65,6 +72,10 @@ A one-page shareable version is available on request.
 ```
 war-room-review/
 ├── SKILL.md                     # the skill: modes, process, output format
+├── examples/
+│   └── fernwood-checkout-review.md
+├── docs/
+│   └── index.html               # visual one-pager of the example review
 └── references/
     ├── product-management.md
     ├── engineering.md

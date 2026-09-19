@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>War room review example: Fernwood checkout</title>
+<meta name="description" content="A fictional checkout flow reviewed by five seats (product management, engineering, content design, product design, and the user), with the tensions between them.">
+<style>
+:root {
+  --bg: #faf8f4;
+  --surface: #ffffff;
+  --ink: #1d2320;
+  --muted: #56605a;
+  --line: #e2ded5;
+  --accent: #2f6b4f;
+  --accent-soft: #e4efe8;
+  --block: #a3261b;
+  --block-soft: #fbe9e6;
+  --fix: #8a5a00;
+  --fix-soft: #fdf1d8;
+  --consider: #3d5a80;
+  --consider-soft: #e5edf6;
+  --focus: #1a56db;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141816;
+    --surface: #1c221f;
+    --ink: #ecefec;
+    --muted: #a3ada6;
+    --line: #313a35;
+    --accent: #7cc4a0;
+    --accent-soft: #1f3128;
+    --block: #ff9a8e;
+    --block-soft: #3a1f1c;
+    --fix: #f0c26a;
+    --fix-soft: #372c14;
+    --consider: #9dbbe0;
+    --consider-soft: #1d2a3b;
+    --focus: #8ab4ff;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 17px/1.6 ui-sans-serif, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+header { padding: 56px 0 32px; border-bottom: 1px solid var(--line); }
+.eyebrow {
+  font: 600 13px/1 ui-monospace, "SF Mono", Menlo, monospace;
+  color: var(--accent);
+  margin: 0 0 16px;
+}
+h1 { font: 700 clamp(30px, 6vw, 44px)/1.15 Georgia, "Iowan Old Style", serif; margin: 0 0 16px; letter-spacing: -0.01em; }
+.lede { color: var(--muted); font-size: 19px; max-width: 62ch; margin: 0; }
+.note {
+  margin-top: 24px; padding: 12px 16px; border-left: 3px solid var(--accent);
+  background: var(--accent-soft); font-size: 15px; border-radius: 0 8px 8px 0;
+}
+h2 { font: 700 26px/1.25 Georgia, "Iowan Old Style", serif; margin: 0 0 8px; }
+section { padding: 44px 0 8px; }
+.sub { color: var(--muted); margin: 0 0 24px; max-width: 62ch; }
+
+.screens { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 8px; list-style: none; padding: 0; }
+.screens li { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; font-size: 15px; }
+.screens strong { display: block; font-size: 13px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; font-weight: 600; margin-bottom: 4px; }
+
+.working { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.working li { background: var(--accent-soft); border-radius: 12px; padding: 14px 18px; }
+.working b { display: block; }
+
+.tension { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; margin-bottom: 20px; }
+.tension h3 { margin: 0 0 14px; font-size: 19px; line-height: 1.35; }
+.badge {
+  display: inline-block; font: 600 12px/1 ui-monospace, Menlo, monospace; padding: 6px 10px;
+  border-radius: 999px; margin-bottom: 12px;
+}
+.k-answerable { background: var(--consider-soft); color: var(--consider); }
+.k-false { background: var(--accent-soft); color: var(--accent); }
+.k-tradeoff { background: var(--fix-soft); color: var(--fix); }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.side { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font-size: 15px; }
+.side b { display: block; font: 600 12px/1.2 ui-monospace, Menlo, monospace; color: var(--muted); margin-bottom: 6px; }
+.resolve { margin: 0; padding-top: 14px; border-top: 1px dashed var(--line); font-size: 16px; }
+.resolve b { color: var(--accent); }
+@media (max-width: 620px) { .vs { grid-template-columns: 1fr; } }
+
+.fixes { counter-reset: fix; list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.fixes li { counter-increment: fix; display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; }
+.fixes li::before {
+  content: counter(fix); width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent); color: var(--bg); display: grid; place-items: center; font: 700 17px/1 Georgia, serif;
+}
+.fixes b { display: block; margin-bottom: 2px; }
+
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; margin-bottom: 10px; }
+summary { cursor: pointer; padding: 14px 18px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font: 400 22px/1 ui-monospace, Menlo, monospace; color: var(--muted); }
+details[open] summary::after { content: "–"; }
+details .body { padding: 0 18px 8px; }
+.n { padding: 12px 0; border-top: 1px solid var(--line); font-size: 15.5px; }
+.n p { margin: 6px 0 0; }
+.sev { font: 600 11.5px/1 ui-monospace, Menlo, monospace; padding: 5px 8px; border-radius: 6px; margin-right: 8px; white-space: nowrap; }
+.s-block { background: var(--block-soft); color: var(--block); }
+.s-fix { background: var(--fix-soft); color: var(--fix); }
+.s-con { background: var(--consider-soft); color: var(--consider); }
+.also { color: var(--muted); font-size: 14px; }
+
+footer { margin: 56px 0 0; padding: 28px 0 56px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 14px; color: var(--muted); margin-bottom: 16px; align-items: center; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="eyebrow">War room review · example output</p>
+    <h1>Fernwood checkout, reviewed by five seats</h1>
+    <p class="lede">Product management, engineering, content design, product design, and the user each review the same four-screen flow from their own rubric. The useful part is where they disagree.</p>
+    <p class="note"><strong>Fictional.</strong> Fernwood is an invented plant shop, and this flow was written to test the skill. Nothing here refers to a real product.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section aria-labelledby="flow">
+    <h2 id="flow">The flow</h2>
+    <p class="sub">Mobile web, pre-ship, launching in two weeks. Fixed payment provider, three languages, guest checkout required. The author was unsure about the delivery date picker.</p>
+    <ol class="screens">
+      <li><strong>1 · Cart</strong>Promo code open by default. Two equal filled buttons. Shipping “calculated at next step.”</li>
+      <li><strong>2 · Delivery</strong>Tuesday and Thursday dates only. “Invalid input” on any bad field.</li>
+      <li><strong>3 · Payment</strong>Live 10:00 countdown. Shipping fee appears here first. “Payment failed.”</li>
+      <li><strong>4 · Confirmation</strong>“Order placed! 🌿” No date, no email note.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="working">
+    <h2 id="working">What’s working</h2>
+    <p class="sub">Protect these while fixing the rest.</p>
+    <ul class="working">
+      <li><b>Guest checkout with no forced account.</b> It removes the biggest cause of abandonment, and it’s the requirement most often dropped in the last sprint.</li>
+      <li><b>Only offering real delivery days.</b> Honest about how the business works. The gap is the missing explanation, not the restriction.</li>
+      <li><b>Four screens with one job each.</b> The structure is right, so most fixes happen inside screens, not to the flow.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="tensions">
+    <h2 id="tensions">Where they disagree</h2>
+    <p class="sub">Each tension is one of three kinds: answerable with data, a real tradeoff someone must own, or a false conflict that one small change resolves.</p>
+
+    <article class="tension">
+      <span class="badge k-answerable">Answerable</span>
+      <h3>The reservation timer: urgency versus a screen reader and an expiry bug</h3>
+      <div class="vs">
+        <div class="side"><b>Product management</b>A live reservation creates urgency, and urgency lifts completion on stock-limited items like live plants.</div>
+        <div class="side"><b>Engineering and the user</b>It has no defined behavior at 0:00 mid-payment, and it announces every second to a screen reader.</div>
+      </div>
+      <p class="resolve"><b>Resolution:</b> Test with and without it on a slice of traffic, comparing completion and oversold-order rate. If it stays, freeze it during authorization, warn at 2:00, and add a one-tap extend. Product management owns the call.</p>
+    </article>
+
+    <article class="tension">
+      <span class="badge k-false">False conflict</span>
+      <h3>Error messages: six strings in three languages versus “Invalid input”</h3>
+      <div class="vs">
+        <div class="side"><b>Engineering</b>Every error variant is a string in three languages, forever.</div>
+        <div class="side"><b>Content design</b>“Invalid input” and “Payment failed.” are why customers contact support.</div>
+      </div>
+      <p class="resolve"><b>Resolution:</b> Most of the cost is the API returning no reasons. Return a reason code per field (about a day of backend work), then write four short messages: required, format, out of area, declined. Nobody loses.</p>
+    </article>
+
+    <article class="tension">
+      <span class="badge k-tradeoff">Real tradeoff</span>
+      <h3>Shipping on the cart: no surprise versus a fee that can’t be known yet</h3>
+      <div class="vs">
+        <div class="side"><b>Product management</b>A $12.95 surprise on the last screen is the biggest abandonment risk in the flow.</div>
+        <div class="side"><b>Engineering</b>Shipping depends on postcode and box size, and neither exists at the cart.</div>
+      </div>
+      <p class="resolve"><b>Decision for product management:</b> a flat estimate on the cart (“from $9.95, final after you enter your address”), free-shipping threshold messaging, or moving the address step first. Each trades accuracy, effort, and flow order. Design should propose which keeps it at four screens.</p>
+    </article>
+
+    <article class="tension">
+      <span class="badge k-false">False conflict</span>
+      <h3>Cart buttons: one calm primary versus keeping “Continue shopping” visible</h3>
+      <div class="vs">
+        <div class="side"><b>Product management</b>“Continue shopping” recovers customers who aren’t ready to buy.</div>
+        <div class="side"><b>Product design</b>Two equal filled buttons split attention at the moment of commitment.</div>
+      </div>
+      <p class="resolve"><b>Resolution:</b> Make “Continue shopping” an outline or text button. It stays visible and recoverable while “Proceed to checkout” is the only filled button. Confirm by comparing the click ratio before and after.</p>
+    </article>
+  </section>
+
+  <section aria-labelledby="fixes">
+    <h2 id="fixes">If you fix three things</h2>
+    <p class="sub">Ranked, and specific enough to start today.</p>
+    <ol class="fixes">
+      <li><div><b>Define what the timer does, and make it accessible.</b>Freeze it during card authorization, announce only at 2:00 and 0:30, add a one-tap extend, and decide what happens at 0:00. The only issue that both loses money and blocks a user.</div></li>
+      <li><div><b>Show shipping before the payment screen.</b>Even as “from $9.95, final after you enter your address.” It removes the top abandonment driver and makes the total believable.</div></li>
+      <li><div><b>Fix the dead-end messages.</b>Replace “Payment failed.” and “Invalid input” with specific, actionable ones backed by field-level reasons. Add the delivery date and the email line to the confirmation.</div></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="seats">
+    <h2 id="seats">The notes behind it</h2>
+    <p class="sub">Each seat wrote from its own rubric before any seat read the others. Two notes are Blocking, and both are about the same timer.</p>
+    <div class="legend" aria-label="Severity key">
+      <span><span class="sev s-block">Blocking</span>ships broken or wrong</span>
+      <span><span class="sev s-fix">Should fix</span>real cost if ignored</span>
+      <span><span class="sev s-con">Consider</span>judgment call</span>
+    </div>
+
+    <details>
+      <summary>Product management</summary>
+      <div class="body">
+        <div class="n"><span class="sev s-fix">Should fix</span><b>The shipping fee first appears on the payment screen.</b><p>The classic cause of abandonment at checkout, and it makes the cart total untrustworthy.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>No success metric is stated for any screen.</b><p>Pick one per step: cart-to-delivery rate, delivery-to-payment rate, payment success rate, and “where is my order” tickets.</p></div>
+        <div class="n"><span class="sev s-con">Consider</span><b>Promo code open by default.</b><p>It sends customers off to search for a code. The smallest test is collapsing it.</p></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Engineering</summary>
+      <div class="body">
+        <div class="n"><span class="sev s-block">Blocking</span><b>The countdown timer has no defined behavior at zero.</b><p>If it hits 0:00 during authorization, inventory can be released while the charge still goes through: an oversold order and a refund.</p><p class="also">Also raised by product management and product design.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>Missing states across the flow.</b><p>Empty cart, sold-out items, out-of-area postcodes, no available dates, slow payment responses, and 3-D Secure challenges are all undrawn.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>“Invalid input” means validation returns no reason.</b><p>A small change to the response is cheaper than generic fallback copy in three languages.</p><p class="also">Also raised by content design.</p></div>
+        <div class="n"><span class="sev s-con">Consider</span><b>The Gift message box.</b><p>Define the length limit, emoji handling, and whether the packing slip can print it.</p></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Content design</summary>
+      <div class="body">
+        <div class="n"><span class="sev s-fix">Should fix</span><b>“Payment failed.” is a dead end.</b><p>Try: “Your payment didn’t go through. Check your card details, or try another card. You haven’t been charged.”</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>“Invalid input” says nothing.</b><p>Each field needs its own message, like “Enter a postcode like 90210.”</p><p class="also">Also raised by engineering.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>“Use Fernwood credit” is unexplained.</b><p>Show the amount: “Apply $20.00 Fernwood credit.” If a guest has none, hide it.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>“Order placed! 🌿” carries too little.</b><p>Confirmation is where customers look for the promise: the date, the address, the email.</p></div>
+        <div class="n"><span class="sev s-con">Consider</span><b>Greyed-out days need one line of explanation.</b><p>“We ship on Tuesdays and Thursdays so plants aren’t stuck in a warehouse over the weekend.”</p></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>Product design</summary>
+      <div class="body">
+        <div class="n"><span class="sev s-fix">Should fix</span><b>Two equal filled buttons on the cart.</b><p>One primary per screen. Make “Continue shopping” an outline or text button.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>The countdown is the loudest element on the payment screen.</b><p>It outweighs the card form, which is the actual task. A small, calm timer near the total does the same job.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>Greyed-out dates look broken, not intentional.</b><p>Show ship days as the only tappable ones, and give the selected date a state that isn’t only color.</p></div>
+        <div class="n"><span class="sev s-con">Consider</span><b>The Gift toggle sits mid-form.</b><p>It interrupts the address task. A separate section after the date picker reads better.</p></div>
+      </div>
+    </details>
+
+    <details>
+      <summary>The user</summary>
+      <div class="body">
+        <div class="n"><span class="sev s-block">Blocking</span><b>I’m using a screen reader and the countdown announces every second.</b><p>I can’t finish typing my card number over the noise, and I can’t tell how much time I have.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>I can’t tell which delivery date I picked.</b><p>The selected date changes color and nothing else. In direct sun I can’t see it.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>I paid and I don’t know if it worked.</b><p>With no date and no email note, I’d check my inbox, find nothing, and contact support.</p></div>
+        <div class="n"><span class="sev s-fix">Should fix</span><b>I mistyped my postcode and got “Invalid input.”</b><p>I don’t know which character is wrong or what a valid one looks like.</p></div>
+      </div>
+    </details>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    Generated with the <a href="https://github.com/mitchellalicht/war-room-review">war-room-review</a> skill. The full text version is in
+    <a href="https://github.com/mitchellalicht/war-room-review/blob/main/examples/fernwood-checkout-review.md">examples/</a>.
+  </div>
+</footer>
+</body>
+</html>
